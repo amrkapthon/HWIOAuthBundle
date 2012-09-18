@@ -168,7 +168,7 @@ class OAuthUtils
         }
 
         if ($path && '/' === $path[0]) {
-            return $this->container->get('request')->getUriForPath($path);
+            return $this->getUriForPath($path);
         }
 
         return $this->generateUrl($path, array(), true);
@@ -184,5 +184,18 @@ class OAuthUtils
     private function generateUrl($route, array $params = array(), $absolute = false)
     {
         return $this->container->get('router')->generate($route, $params, $absolute);
+    }
+    
+    /**
+     * Generate absolute URL without HTTP user info
+     *
+     * @param string $path
+     * 
+     * @return string
+     */
+    private function getUriForPath($path)
+    {
+        $request = $this->container->get('request');
+        return $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl().$path;
     }
 }
