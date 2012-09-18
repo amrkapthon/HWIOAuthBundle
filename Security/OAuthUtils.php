@@ -161,7 +161,7 @@ class OAuthUtils
      *
      * @return string
      */
-    private function generateUri($path)
+    public function generateUri($path)
     {
         if (0 === strpos($path, 'http') || !$path) {
             return $path;

@@ -16,7 +16,8 @@ use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+    HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap, 
+    HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
 /**
  * OAuthListener
@@ -27,6 +28,11 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
 class OAuthListener extends AbstractAuthenticationListener
 {
     /**
+     * @var OAuthUtils
+     */
+    private $utils;
+    
+    /**
      * @var ResourceOwnerMap
      */
     private $resourceOwnerMap;
@@ -35,7 +41,15 @@ class OAuthListener extends AbstractAuthenticationListener
      * @var array
      */
     private $checkPaths;
-
+    
+    /**
+     * @param OAuthUtils $utils
+     */
+    public function setOAuthUtils(OAuthUtils $utils)
+    {
+        $this->utils = $utils;
+    }
+    
     /**
      * @var ResourceOwnerMap $resourceOwnerMap
      */
@@ -81,7 +95,7 @@ class OAuthListener extends AbstractAuthenticationListener
 
         $accessToken = $resourceOwner->getAccessToken(
             $request,
-            $this->httpUtils->createRequest($request, $checkPath)->getUri()
+            $this->utils->generateUri($checkPath)
         );
 
         $token = new OAuthToken($accessToken);

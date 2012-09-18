@@ -43,7 +43,11 @@
         Cheers!
         -->
         <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%"
-                 parent="security.authentication.listener.abstract" public="false" abstract="true" />
+                 parent="security.authentication.listener.abstract" public="false" abstract="true">
+            <call method="setOAuthUtils">
+                <argument type="service" id="hwi_oauth.security.oauth_utils" />
+            </call>
+        </service>
         <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" public="false" />
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" public="false" abstract="true">
             <argument type="service" id="security.http_utils" />
